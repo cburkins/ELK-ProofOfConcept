@@ -28,6 +28,13 @@ if [ ! -f $file2 ]; then
    echo; exit
 fi
 
+echo
+echo "            file1 = $file1"
+echo "            file2 = $file2"
+echo "      merged file = $mergedfile"
+echo 
+
+
 printf "Parsing for valid lines..."
 # Look for valid data lines within the file
 # Valid lines look like this:
@@ -54,18 +61,13 @@ diff2=`echo "$file2_line_count - $file2_valid_count" | bc`
 
 printf "Calculating unique counts..."
 overlap_count=`cat $file1_valid $file2_valid | sort | uniq -d | wc -l`
-merged_count=`cat $file1_valid $file2_valid | sort | uniq -u | wc -l`
+merged_count=`cat $file1_valid $file2_valid | sort | uniq | wc -l`
 total_count=`cat $file1_valid $file2_valid | wc -l`
 overlap_pct=`echo "scale=4; $overlap_count / $total_count * 100" | bc -l`
 merged_pct=`echo "scale=4; $merged_count / $total_count * 100" | bc -l`
 echo "done"
 
 
-echo
-echo "            file1 = $file1"
-echo "            file2 = $file2"
-echo "      merged file = $mergedfile"
-echo 
 printf " file1 line  count = %'10d\n" $file1_line_count
 printf " file1 valid count = %'10d (-%d)\n" $file1_valid_count $diff1
 printf " file2 line  count = %'10d\n" $file2_line_count
@@ -78,10 +80,9 @@ echo
 echo "Hit <return> to continue..."
 read
 printf "Merging two input files and creating output file..."
+cat $file1_valid $file2_valid | sort | uniq > $mergedfile
 echo "done"
 echo
-
-cat $file1_valid $file2_valid | sort | uniq -u > $mergedfile
 
 merged_count=`wc -l $mergedfile | awk '{print $1}'`
 printf "    merged count = %'.f\n" $merged_count
