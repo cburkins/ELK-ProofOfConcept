@@ -2,6 +2,7 @@
 
 echo
 
+# temp files
 tmp_file=/tmp/merged.$$
 file1_valid=/tmp/file1.$$
 file2_valid=/tmp/file2.$$
