@@ -43,7 +43,7 @@ echo "Go..."
 echo 
 
 # Load the data lines into logstash, using my csvload configuration file
-cat $tmp_file | /opt/logstash/bin/logstash -f ./csvload.conf
+cat $tmp_file | /opt/logstash/bin/logstash -f ./csvload_job_details.conf
 
 /bin/rm $tmp_file
 
