@@ -1,6 +1,7 @@
 #!/bin/bash
 
-tmp_file=/tmp/logstash_input.$$
+tmp_file1=/tmp/logstash_input.1.$$
+tmp_file2=/tmp/logstash_input.2.$$
 
 if [ $# -ne 1 ]; then
    echo
@@ -25,10 +26,16 @@ fi
 # Example of non-valid line: Occasionally there's a weird line like this:
 #    6582438,ncsebus,150,Backup,UNKNOWN,-,"May 20, 2015 12:14:55 PM",13651431295,0,0,0
 # NOTE: this technique is also used in the merge_files.sh script
-cat $input_file | egrep  '\,[0-9][0-9]*:[0-9][0-9]*:[0-9][0-9]*\,' > $tmp_file
+
+
+# The following line does a few tricks
+# 1. greps for a properly formatted duration field (i.e. 00:00:34 or 4:23:00)
+# 2. Uses "tr" to get rid of any dos-style end-of-line (makes it easier to grep for end-of-line anchor)
+# 3. grep out (removes) any line with an odd number of apostrophes
+cat $input_file | egrep  '\,[0-9][0-9]*:[0-9][0-9]*:[0-9][0-9]*\,' | tr -d '\r' | egrep -v '^([^\"]*\"[^\"]+\"[^\"]*)+\"$' > $tmp_file1
 
 count_orig=`wc -l $input_file | awk '{print $1}'`
-count_good=`wc -l $tmp_file | awk '{print $1}'`
+count_good=`wc -l $tmp_file1 | awk '{print $1}'`
 delta=`echo "$count_orig - $count_good" | bc`
 
 echo
@@ -43,7 +50,7 @@ echo "Go..."
 echo 
 
 # Load the data lines into logstash, using my csvload configuration file
-cat $tmp_file | /opt/logstash/bin/logstash -f ./csvload_opsctr.conf
+cat $tmp_file1 | /opt/logstash/bin/logstash -f ./csvload_opsctr.conf
 
-/bin/rm $tmp_file
+/bin/rm $tmp_file1
 
