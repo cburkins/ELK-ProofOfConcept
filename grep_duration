@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# Looks for valid data lines
+# Valid lines look like this:
+#    3204088,itsbus40,0,Backup,itshru01.backup.jnj.com,"May 15, 2015 9:00:16 AM","May 15, 2015 9:00:50 AM",00:00:34,"208,2\56",1,"22,653"
+# Valid data lines will have a comma followed by a duration within the line
+# e.g.    ,00:00:34
+# e.g.    ,4:23:00
+# Example of non-valid line: Comments at the top and bottom of file
+# Example of non-valid line: Occasionally there's a weird line like this:
+#    6582438,ncsebus,150,Backup,UNKNOWN,-,"May 20, 2015 12:14:55 PM",13651431295,0,0,0
+
+
+
+egrep  '\,[0-9][0-9]*:[0-9][0-9]*:[0-9][0-9]*\,'
+

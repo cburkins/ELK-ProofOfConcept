@@ -2,6 +2,8 @@
 
 tmp_file1=/tmp/logstash_input.1.$$
 tmp_file2=/tmp/logstash_input.2.$$
+grep_duration=./grep_duration
+grep_even_apostrophes=./apostrophe_pairs
 
 if [ $# -ne 1 ]; then
    echo
@@ -30,9 +32,8 @@ fi
 
 # The following line does a few tricks
 # 1. greps for a properly formatted duration field (i.e. 00:00:34 or 4:23:00)
-# 2. Uses "tr" to get rid of any dos-style end-of-line (makes it easier to grep for end-of-line anchor)
 # 3. grep out (removes) any line with an odd number of apostrophes
-cat $input_file | egrep  '\,[0-9][0-9]*:[0-9][0-9]*:[0-9][0-9]*\,' | tr -d '\r' | egrep -v '^([^\"]*\"[^\"]+\"[^\"]*)+\"$' > $tmp_file1
+cat $input_file | $grep_duration | $grep_even_apostrophes > $tmp_file1
 
 count_orig=`wc -l $input_file | awk '{print $1}'`
 count_good=`wc -l $tmp_file1 | awk '{print $1}'`
@@ -43,6 +44,8 @@ echo "         Input file = $input_file"
 echo "Record count (orig) = $count_orig"
 echo "Record count (good) = $count_good (delta of $delta)"
 echo
+
+exit
 
 echo "Hit <return> to continue..."
 read
