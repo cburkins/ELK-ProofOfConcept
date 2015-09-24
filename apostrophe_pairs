@@ -1,5 +1,13 @@
 #!/bin/bash
 
+# First: removes all dos-style end-of-line chars via the "tr" utility
+# Then looks for any line with an odd number of apostrophes
+# It looks for the following pattern (excluding line if it finds the pattern)
+#   Anchors to beginning of line
+#   0 or more non-apostrophes
+#   An apostrophe, then other chars, then another apostrophe (repeat one or more times)
+#   A lone apostrophe
+#   Non-apostrophe
 tr -d '\r' | egrep -v '^([^\"]*\"[^\"]+\"[^\"]*)+\"$'
 
 
