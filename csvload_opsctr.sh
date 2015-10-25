@@ -45,8 +45,6 @@ echo "Record count (orig) = $count_orig"
 echo "Record count (good) = $count_good (delta of $delta)"
 echo
 
-exit
-
 echo "Hit <return> to continue..."
 read
 echo "Go..."
