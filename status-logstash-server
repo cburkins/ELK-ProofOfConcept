@@ -40,5 +40,11 @@ service kibana status
 service nginx status
 
 echo
+echo "---------------------------------------------------------"
+echo "Cluster Status"
+echo "---------------------------------------------------------"
+curl -XGET 'http://localhost:9200/_cluster/health?pretty=true'
+
+echo
 
 
