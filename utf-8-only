@@ -1,2 +1,0 @@
-#!/bin/bash
-iconv -c -t UTF-8
