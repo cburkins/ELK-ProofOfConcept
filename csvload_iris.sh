@@ -20,6 +20,7 @@ if [ ! -f $input_file ]; then
    echo; exit
 fi
 
+# Look for a date field to verify a good data line
 cat $input_file | grep "20..-..-.."  > $tmp_file1
 
 count_orig=`wc -l $input_file | awk '{print $1}'`
@@ -29,7 +30,7 @@ delta=`echo "$count_orig - $count_good" | bc`
 echo
 echo "         Input file = $input_file"
 echo "Record count (orig) = $count_orig"
-echo "Record count (good) = $count_good (delta of $delta)"
+echo "Record count (good) = $count_good (only lines with a date, delta of $delta)"
 echo
 
 echo "Hit <return> to continue..."
