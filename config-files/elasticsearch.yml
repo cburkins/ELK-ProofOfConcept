@@ -1,0 +1,15 @@
+
+network.host: localhost
+
+# Cluster name
+cluster.name: mickeymouse
+
+# Allows for unbounded queue for reads
+threadpool.search.queue_size: 2000
+
+# Max shards per index
+index.number_of_shards: 1
+
+# Number of replicas per shard
+index.number_of_replicas: 1
+
